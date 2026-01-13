@@ -1,7 +1,7 @@
-from package.main import hello_world
+from mazegen.a_maze_ing import hello_world
 
 
-def test_hello_world():
+def test_hello_world() -> None:
     """
     A basic test to ensure the template CI passes out of the box.
     Users should delete or modify this test.

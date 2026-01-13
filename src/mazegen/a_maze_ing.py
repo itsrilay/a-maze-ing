@@ -1,8 +1,8 @@
-def hello_world():
+def hello_world() -> str:
     return "Hello from the template!"
 
 
-def main():
+def main() -> None:
     """
     Entry point for the application script.
     """
