@@ -1,0 +1,16 @@
+# Python / uv artifacts
+__pycache__/
+*.py[cod]
+*.so
+.venv/
+.python-version
+
+# Distribution
+dist/
+build/
+*.egg-info/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
