@@ -1,17 +1,8 @@
 # Python / uv artifacts
 .mypy_cache
 __pycache__/
-*.py[cod]
-*.so
 .venv/
 .python-version
 
-# Distribution
-dist/
-build/
-*.egg-info/
-
 # Testing
 .pytest_cache/
-.coverage
-htmlcov/
