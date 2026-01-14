@@ -1,13 +1,22 @@
-from typing import Any, cast
+from typing import Any, cast, TypedDict
 import sys
 
 
-def contains_negative(value: Any) -> bool:
+class MazeConfig(TypedDict):
+    WIDTH: int
+    HEIGHT: int
+    ENTRY: tuple[int, int]
+    EXIT: tuple[int, int]
+    OUTPUT_FILE: str
+    PERFECT: bool
+
+
+def contains_negative(value: int | tuple[int, int]) -> bool:
     """Checks if the configuration value contains invalid numeric data.
 
     Args:
-        value (Any): The configuration value to check. Can be an int,
-            a tuple of ints, or other types (which are ignored).
+        value (int | tuple[int, int]): The configuration value to check.
+        Can be an int, or a tuple of ints.
 
     Returns:
         bool: True if a single integer is <= 0 (invalid for dimensions) or
@@ -17,7 +26,7 @@ def contains_negative(value: Any) -> bool:
         # Dimensions (WIDTH/HEIGHT) must be strictly positive (> 0)
         if value <= 0:
             return True
-    if isinstance(value, tuple):
+    else:
         x, y = cast(tuple[int, int], value)
         # Coordinates (ENTRY/EXIT) can be 0 but cannot be negative
         if x < 0 or y < 0:
@@ -35,6 +44,10 @@ def validate_config(config: dict[str, Any]) -> None:
     Args:
         config (dict[str, Any]): A dictionary containing the config settings.
     """
+
+    # Types for a valid config
+    schema = MazeConfig.__annotations__
+
     req_keys = ["WIDTH", "HEIGHT", "ENTRY", "EXIT", "OUTPUT_FILE", "PERFECT"]
 
     # Check for missing keys
@@ -43,10 +56,24 @@ def validate_config(config: dict[str, Any]) -> None:
         keys = "\n".join(missing_keys)
         sys.exit(f"ERROR: Missing mandatory keys in config:\n{keys}")
 
-    # Check for invalid values using the helper function
+    # Check for invalid values
     for key, value in config.items():
-        if contains_negative(value):
-            sys.exit(f"ERROR: Negative integer for {key} in config")
+        # Validate type
+        if key in schema:
+            expected_type = schema[key]
+            # isinstance() doesn't support generics like tuple[int, int]
+            if expected_type == tuple[int, int]:
+                expected_type = tuple
+            if not isinstance(value, expected_type):
+                sys.exit(
+                    f"ERROR: Invalid value for {key} in config: " +
+                    f"Expected: {expected_type}   Got: {type(value)}"
+                )
+
+        # Validate numeric value
+        if isinstance(value, (int, tuple)):
+            if contains_negative(value):
+                sys.exit(f"ERROR: Negative integer for {key} in config")
 
 
 def parse_value(value: str) -> Any:
