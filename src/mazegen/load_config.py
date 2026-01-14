@@ -1,4 +1,4 @@
-from typing import Any, cast, TypedDict
+from typing import Any, TypedDict
 import sys
 
 
@@ -27,7 +27,7 @@ def contains_negative(value: int | tuple[int, int]) -> bool:
         if value <= 0:
             return True
     else:
-        x, y = cast(tuple[int, int], value)
+        x, y = value
         # Coordinates (ENTRY/EXIT) can be 0 but cannot be negative
         if x < 0 or y < 0:
             return True
