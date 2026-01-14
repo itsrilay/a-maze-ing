@@ -4,8 +4,12 @@ install:
 run:
 	@uv run src/mazegen/a_maze_ing.py config.txt
 
+debug:
+	@uv run python -m pdb src/mazegen/a_maze_ing.py config.txt
+
 clean:
-	rm -rf __pycache__ .mypy_cache */__pycache__ */.mypy_cache
+	rm -rf .mypy_cache .pytest_cache
+	find . -depth -path "./.venv" -prune -o -name "__pycache__" -exec rm -rf {} +
 
 lint:
 	uv run flake8 .
