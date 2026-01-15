@@ -1,4 +1,4 @@
-from typing import Any, TypedDict
+from typing import Any, TypedDict, cast
 import sys
 
 
@@ -9,6 +9,9 @@ class MazeConfig(TypedDict):
     EXIT: tuple[int, int]
     OUTPUT_FILE: str
     PERFECT: bool
+
+
+MANDATORY_KEYS = ["WIDTH", "HEIGHT", "ENTRY", "EXIT", "OUTPUT_FILE", "PERFECT"]
 
 
 def contains_negative(value: int | tuple[int, int]) -> bool:
@@ -48,10 +51,8 @@ def validate_config(config: dict[str, Any]) -> None:
     # Types for a valid config
     schema = MazeConfig.__annotations__
 
-    req_keys = ["WIDTH", "HEIGHT", "ENTRY", "EXIT", "OUTPUT_FILE", "PERFECT"]
-
     # Check for missing keys
-    missing_keys = [k for k in req_keys if k not in config.keys()]
+    missing_keys = [k for k in MANDATORY_KEYS if k not in config.keys()]
     if missing_keys:
         keys = "\n".join(missing_keys)
         sys.exit(f"ERROR: Missing mandatory keys in config:\n{keys}")
@@ -113,7 +114,7 @@ def parse_value(value: str) -> Any:
         return value
 
 
-def load_config() -> dict[str, Any]:
+def load_config() -> MazeConfig:
     """Loads configuration from the file specified in command-line arguments.
 
     Reads the file line by line, skipping comments and empty lines. It parses
@@ -151,4 +152,4 @@ def load_config() -> dict[str, Any]:
 
     validate_config(config)
 
-    return config
+    return cast(MazeConfig, config)
