@@ -1,22 +1,8 @@
 from typing import Any
-from enum import IntEnum
 from math import ceil
+from mazegen.common import Direction, DIRECTION_OFFSETS
 import random
 
-
-class Direction(IntEnum):
-    NORTH = 1
-    EAST = 2
-    SOUTH = 4
-    WEST = 8
-
-
-DIRECTION_OFFSETS = {
-    Direction.NORTH: (0, -1),
-    Direction.EAST: (1, 0),
-    Direction.SOUTH: (0, 1),
-    Direction.WEST: (-1, 0)
-}
 
 OPPOSITE_DIR = {
     Direction.NORTH: Direction.SOUTH,
@@ -89,7 +75,7 @@ class MazeGenerator:
                 continue
 
     def get_unvisited_neighbors(
-            self, x: int, y: int
+        self, x: int, y: int
     ) -> list[tuple[int, int, Direction]]:
         """Finds all unvisited neighbors for a given cell.
 
@@ -113,10 +99,10 @@ class MazeGenerator:
         return neighbors
 
     def generate_maze(
-            self,
-            is_perfect: bool,
-            entry: tuple[int, int],
-            exit: tuple[int, int]
+        self,
+        is_perfect: bool,
+        entry: tuple[int, int],
+        exit: tuple[int, int]
     ) -> None:
         """Generates the maze structure and displays the result.
 
