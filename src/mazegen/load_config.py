@@ -1,14 +1,6 @@
-from typing import Any, TypedDict, cast
+from typing import Any, cast
+from mazegen.common import MazeConfig
 import sys
-
-
-class MazeConfig(TypedDict):
-    WIDTH: int
-    HEIGHT: int
-    ENTRY: tuple[int, int]
-    EXIT: tuple[int, int]
-    OUTPUT_FILE: str
-    PERFECT: bool
 
 
 MANDATORY_KEYS = ["WIDTH", "HEIGHT", "ENTRY", "EXIT", "OUTPUT_FILE", "PERFECT"]
@@ -121,7 +113,7 @@ def load_config() -> MazeConfig:
     key-value pairs and converts values to appropriate types.
 
     Returns:
-        dict[str, Any]: A dictionary containing the configuration settings.
+        MazeConfig: A dictionary containing the configuration settings.
 
     Raises:
         SystemExit: If a line is not a valid key-value pair.

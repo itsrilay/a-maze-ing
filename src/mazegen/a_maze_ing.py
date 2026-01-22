@@ -1,5 +1,7 @@
 from mazegen.load_config import load_config
 from mazegen.generator import MazeGenerator
+from mazegen.solver import MazeSolver
+from mazegen.writer import save_maze
 
 
 def main() -> None:
@@ -8,6 +10,9 @@ def main() -> None:
     print(config)
     generator = MazeGenerator(config["HEIGHT"], config["WIDTH"])
     generator.generate_maze(config["PERFECT"], config["ENTRY"], config["EXIT"])
+    solver = MazeSolver(generator.grid)
+    path = solver.solve_maze(config["ENTRY"], config["EXIT"])
+    save_maze(solver.grid, path, config)
 
 
 if __name__ == "__main__":

@@ -1,4 +1,14 @@
 from enum import IntEnum
+from typing import TypedDict
+
+
+class MazeConfig(TypedDict):
+    WIDTH: int
+    HEIGHT: int
+    ENTRY: tuple[int, int]
+    EXIT: tuple[int, int]
+    OUTPUT_FILE: str
+    PERFECT: bool
 
 
 class Direction(IntEnum):
