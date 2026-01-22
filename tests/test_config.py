@@ -32,6 +32,34 @@ def test_load_config_valid() -> None:
             }
 
 
+def test_load_config_valid_imperfect() -> None:
+    """Tests loading a valid configuration file.
+
+    Verifies that the configuration dictionary is correctly populated
+    when the file contains all mandatory keys and valid values.
+    """
+    test_args = ["prog_name", "fake_config.txt"]
+
+    mock_data = (
+        "WIDTH=20\n"
+        "HEIGHT=15\n"
+        "ENTRY=0,0\n"
+        "EXIT=19,14\n"
+        "OUTPUT_FILE=maze.txt\n"
+        "PERFECT=False"
+    )
+    with patch.object(sys, 'argv', test_args):
+        with patch("builtins.open", new=mock_open(read_data=mock_data)):
+            assert load_config() == {
+                "WIDTH": 20,
+                "HEIGHT": 15,
+                "ENTRY": (0, 0),
+                "EXIT": (19, 14),
+                "OUTPUT_FILE": "maze.txt",
+                "PERFECT": False
+            }
+
+
 def test_load_config_missing_key() -> None:
     """Tests loading a configuration with a missing mandatory key.
 

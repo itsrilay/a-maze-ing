@@ -7,7 +7,7 @@ def main() -> None:
     config = load_config()
     print(config)
     generator = MazeGenerator(config["HEIGHT"], config["WIDTH"])
-    generator.generate_maze()
+    generator.generate_maze(config["PERFECT"], config["ENTRY"], config["EXIT"])
 
 
 if __name__ == "__main__":

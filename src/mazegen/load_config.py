@@ -72,8 +72,8 @@ def validate_config(config: dict[str, Any]) -> None:
                 )
 
         # Validate numeric value
-        if isinstance(value, (int, tuple)):
-            if contains_negative(value):
+        if isinstance(value, (int, tuple)) and not isinstance(value, bool):
+            if contains_negative(cast(tuple[int, int] | int, value)):
                 sys.exit(f"ERROR: Negative integer for {key} in config")
 
 
