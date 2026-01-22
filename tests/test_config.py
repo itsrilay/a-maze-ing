@@ -76,6 +76,28 @@ def test_load_config_negative_height() -> None:
                 load_config()
 
 
+def test_load_config_invalid_bool() -> None:
+    """Tests loading a configuration with an invalid boolean value.
+
+    Verifies that the program exits gracefully when
+    PERFECT isn't a boolean value.
+    """
+    test_args = ["prog_name", "fake_config.txt"]
+
+    mock_data = (
+        "WIDTH=20\n"
+        "HEIGHT=15\n"
+        "ENTRY=0,0\n"
+        "EXIT=19,14\n"
+        "OUTPUT_FILE=maze.txt\n"
+        "PERFECT=nice"
+    )
+    with patch.object(sys, 'argv', test_args):
+        with patch("builtins.open", new=mock_open(read_data=mock_data)):
+            with pytest.raises(SystemExit):
+                load_config()
+
+
 def test_load_config_invalid_coordinate_format() -> None:
     """Tests loading a configuration with malformed coordinates.
 

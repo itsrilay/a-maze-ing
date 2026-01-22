@@ -1,13 +1,25 @@
-from typing import Any, cast
+from typing import Any, TypedDict, cast
 import sys
 
 
-def contains_negative(value: Any) -> bool:
+class MazeConfig(TypedDict):
+    WIDTH: int
+    HEIGHT: int
+    ENTRY: tuple[int, int]
+    EXIT: tuple[int, int]
+    OUTPUT_FILE: str
+    PERFECT: bool
+
+
+MANDATORY_KEYS = ["WIDTH", "HEIGHT", "ENTRY", "EXIT", "OUTPUT_FILE", "PERFECT"]
+
+
+def contains_negative(value: int | tuple[int, int]) -> bool:
     """Checks if the configuration value contains invalid numeric data.
 
     Args:
-        value (Any): The configuration value to check. Can be an int,
-            a tuple of ints, or other types (which are ignored).
+        value (int | tuple[int, int]): The configuration value to check.
+        Can be an int, or a tuple of ints.
 
     Returns:
         bool: True if a single integer is <= 0 (invalid for dimensions) or
@@ -17,8 +29,8 @@ def contains_negative(value: Any) -> bool:
         # Dimensions (WIDTH/HEIGHT) must be strictly positive (> 0)
         if value <= 0:
             return True
-    if isinstance(value, tuple):
-        x, y = cast(tuple[int, int], value)
+    else:
+        x, y = value
         # Coordinates (ENTRY/EXIT) can be 0 but cannot be negative
         if x < 0 or y < 0:
             return True
@@ -35,18 +47,34 @@ def validate_config(config: dict[str, Any]) -> None:
     Args:
         config (dict[str, Any]): A dictionary containing the config settings.
     """
-    req_keys = ["WIDTH", "HEIGHT", "ENTRY", "EXIT", "OUTPUT_FILE", "PERFECT"]
+
+    # Types for a valid config
+    schema = MazeConfig.__annotations__
 
     # Check for missing keys
-    missing_keys = [k for k in req_keys if k not in config.keys()]
+    missing_keys = [k for k in MANDATORY_KEYS if k not in config.keys()]
     if missing_keys:
         keys = "\n".join(missing_keys)
         sys.exit(f"ERROR: Missing mandatory keys in config:\n{keys}")
 
-    # Check for invalid values using the helper function
+    # Check for invalid values
     for key, value in config.items():
-        if contains_negative(value):
-            sys.exit(f"ERROR: Negative integer for {key} in config")
+        # Validate type
+        if key in schema:
+            expected_type = schema[key]
+            # isinstance() doesn't support generics like tuple[int, int]
+            if expected_type == tuple[int, int]:
+                expected_type = tuple
+            if not isinstance(value, expected_type):
+                sys.exit(
+                    f"ERROR: Invalid value for {key} in config: " +
+                    f"Expected: {expected_type}   Got: {type(value)}"
+                )
+
+        # Validate numeric value
+        if isinstance(value, (int, tuple)):
+            if contains_negative(value):
+                sys.exit(f"ERROR: Negative integer for {key} in config")
 
 
 def parse_value(value: str) -> Any:
@@ -86,7 +114,7 @@ def parse_value(value: str) -> Any:
         return value
 
 
-def load_config() -> dict[str, Any]:
+def load_config() -> MazeConfig:
     """Loads configuration from the file specified in command-line arguments.
 
     Reads the file line by line, skipping comments and empty lines. It parses
@@ -124,4 +152,4 @@ def load_config() -> dict[str, Any]:
 
     validate_config(config)
 
-    return config
+    return cast(MazeConfig, config)
