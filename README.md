@@ -1,115 +1,100 @@
-# **Basic Python Template**
+*This project has been created as part of the 42 curriculum by ruisilva, hroxo*
 
-A modern, battery-included Python project template. It uses [uv](https://github.com/astral-sh/uv) for lightning-fast dependency management and follows the industry-standard src layout.
+# A-Maze-ing
 
-## **📂 Project Structure**
+## Description
+The goal of this project is to build a robust maze generator in Python. It takes a configuration file as input to create both perfect and imperfect mazes, solves them, and exports the data in a specific hexadecimal format.
 
-```text
-.  
-├── .github/workflows/ci.yml     # GitHub Actions (Automated testing)  
-├── src/  
-│   └── package/                 # 🟢 SOURCE CODE GOES HERE  
-│       ├── __init__.py  
-│       └── main.py  
-├── tests/                       # 🟢 TESTS GO HERE  
-│   └── test_main.py
-├── .gitignore  
-├── .python-version              # Pinned Python version  
-├── pyproject.toml               # Dependencies & Config  
-├── uv.lock                      # Exact version lock file  
-└── README.md
-```
+Beyond the CLI tool, this project features a visualizer with user interactions and is structured as a reusable Python package for future integration.
 
-## **🚀 Getting Started**
+## Instructions
 
-### **1. Install uv**
+This project includes a `Makefile` to automate common tasks.
 
-This project uses uv instead of standard pip/poetry. It is extremely fast and manages Python versions for you.  
-**macOS / Linux:**
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
-
-**Windows:**
-```bash
-powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
-```
-
-### **2. Initialize the Environment**
-
-Run the following command to create the virtual environment and install dependencies:
+### Installation
+To install the project dependencies (using `uv`), run:
 
 ```bash
-uv sync
+make install
 ```
 
-## **🛠 Development Workflow**
-
-You do not need to manually activate a virtual environment (e.g., source .venv/bin/activate). uv handles this for you.
-
-### **Running Code**
-
-To run the main script or any python command inside the environment:  
+### Usage
+To generate and solve a maze using the default `config.txt`:
 
 ```bash
-uv run -m package.main  
+make run
 ```
-OR
+
+### Development
+
+* **Debug**: Run the program with the Python debugger (`pdb`).
 
 ```bash
-uv run src/package/main.py
+make debug
 ```
 
-### **Managing Dependencies**
-
-Do **not** edit requirements.txt manually.
-
-| Action | Command |
-| :---- | :---- |
-| **Add a library** (e.g., pandas) | uv add pandas |
-| **Add a dev tool** (e.g., ruff) | uv add --dev ruff |
-| **Remove a library** | uv remove pandas |
-| **Update lock file** | uv lock |
-
-### **Running Tests**
-
-This template is configured with pytest.
+* **Lint**: Check code quality with `flake8` and `mypy`.
 
 ```bash
-uv run pytest
+make lint
 ```
 
-## **🤖 CI/CD (GitHub Actions)**
+* **Lint (strict)**: Check code quality with `flake8` and `mypy --strict`
 
-This repository includes a pre-configured GitHub Actions workflow at .github/workflows/ci.yml.  
-Every time you push to the main branch or open a Pull Request, it will:
+```bash
+make lint-strict
+```
 
-1. Set up uv.  
-2. Install dependencies.  
-3. Run your tests automatically.
+* **Clean**: Remove temporary files and caches.
 
-## **📝 How to use this Template**
+```bash
+make clean
+```
 
-If you are using this repository to start a **new project**, follow these customization steps:
+## Configuration
+The program takes a configuration file with one `KEY=VALUE` pair per line.
 
-1. **Rename the Source Folder:**  
-   Rename src/package to your actual project name (e.g., src/my_awesome_tool).  
-2. **Update Configuration:**
-   Open pyproject.toml and update the following:  
-   * **name:** Change "basic-template" to your project name.  
-   * **build target:** Update the path to match your folder rename:  
-     [tool.hatch.build.targets.wheel]  
-     packages = ["src/package"]   ***<--- Update this!***
+| Key | Description | Example |
+| :--- | :--- | :--- |
+| `WIDTH` | Width of the maze (number of cells) | `WIDTH=20` |
+| `HEIGHT` | Height of the maze | `HEIGHT=15` |
+| `ENTRY` | Entrance coordinates (x,y) | `ENTRY=0,0` |
+| `EXIT` | Exit coordinates (x,y) | `EXIT=19,14` |
+| `OUTPUT_FILE` | Filename for the output | `OUTPUT_FILE=maze.txt` |
+| `PERFECT` | `True` for a single path, `False` for loops | `PERFECT=True` |
 
-3. **Update Badges (Optional):**
-   If you change your Python version requirement, remember to update the badge at the top of this README.
+## Algorithms
 
-4. **Clean Git History (Optional):**  
-   If you cloned this manually (instead of using the "Use this template" button), reset the history:
+### Generation: Recurvise Backtracker
+This project utilizes the **Recursive Backtracker** algorithm, a randomized implementation of Depth-First Search (DFS).
 
-   ```bash
-   rm -rf .git  
-   git init  
-   git add .  
-   git commit -m "Initial commit"
-   ```
+* **Mechanism**: The algorithm acts as a "miner" that carves passages by moving to random unvisited neighbors. It utilizes a stack to track the current path; when the miner reaches a dead end, it backtracks (pops from the stack) until a new unvisited neighbor is found.
+
+* **Properties**: This approach generates "perfect" mazes, which are mathematically equivalent to spanning trees (graphs with no loops and a unique path between any two nodes).
+
+* **Aesthetic**: The Recursive Backtracker is known for creating mazes with long, winding corridors and high complexity, making them challenging to solve manually.
+
+### Solving: Breadth-First Search
+To solve the maze, the program implements the **Breadth-First Search (BFS)** algorithm.
+
+* **Mechanism**: BFS explores the maze layer by layer, expanding equally in all directions from the starting point. It uses a queue to manage the frontier of visited cells.
+
+* **Optimality**: Because the maze is an unweighted grid (every step costs the same), BFS is mathematically guaranteed to find the shortest possible path from the entrance to the exit.
+
+## Resources
+
+### References
+* [Maze Generation: Recursive Backtracking](https://weblog.jamisbuck.org/2010/12/27/maze-generation-recursive-backtracking) - The primary reference used for understanding and implementing the generation logic.
+
+* [Breadth-First Search (BFS)](https://en.wikipedia.org/wiki/Breadth-first_search) - Reference for the pathfinding algorithm used to solve the maze.
+
+### AI Usage
+This project utilized AI assistance for the following tasks:
+
+* **Concept Clarification**: Used AI to explain the underlying logic of the Recursive Backtracker and BFS algorithms.
+
+* **Debugging**: Assisted in identifying and fixing errors within the bitmasking system for wall representation.
+
+* **Code Generation**: Generated boilerplate code, specifically for the `Makefile` and project structure setup.
+
+* **Documentation**: Used AI to outline, draft, and format this `README.md` file to ensure compliance with project requirements.
