@@ -126,9 +126,9 @@ class MazeGenerator:
                 # Break walls between current cell and chosen neighbor
                 self.grid[cell[1]][cell[0]] -= direction
                 self.grid[ny][nx] -= OPPOSITE_DIR[direction]
-                stack.append((nx, ny))
-            else:
-                stack.pop(-1)
+                stack.append((nx, ny))  # Move to neighbor
+            else:  # Dead end
+                stack.pop(-1)  # Backtrack
 
         if not is_perfect:
             self._make_imperfect()

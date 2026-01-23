@@ -55,8 +55,7 @@ class MazeSolver:
                 cx, cy = curr_cell
                 if (0 <= nx < self.width and 0 <= ny < self.height and
                         (nx, ny) not in predecessors):
-                    # Check if the wall in the cell is open in this direction.
-                    # If the bitwise AND is 0, it means the bit is NOT set.
+                    # Check if wall is OPEN (bitwise AND is 0)
                     if not self.grid[cy][cx] & direction:
                         predecessors[(nx, ny)] = (cx, cy)
                         queue.append((nx, ny))
