@@ -2,10 +2,10 @@ install:
 	uv sync
 
 run:
-	@uv run src/mazegen/a_maze_ing.py settings/config.txt
+	@uv run a_maze_ing.py config.txt
 
 debug:
-	@uv run python -m pdb src/mazegen/a_maze_ing.py settings/config.txt
+	@uv run python -m pdb a_maze_ing.py config.txt
 
 clean:
 	rm -rf .mypy_cache .pytest_cache
