@@ -1,4 +1,4 @@
-from mazegen.generator import MazeGenerator
+from mazegen.MazeGenerator import MazeGenerator
 
 
 def test_maze_dimensions() -> None:
