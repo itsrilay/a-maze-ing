@@ -6,7 +6,6 @@ __pycache__/
 
 # Testing
 .pytest_cache/
-uv.lock
 
 # subject
 subject.pdf
