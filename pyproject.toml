@@ -4,7 +4,13 @@ version = "0.1.0"
 description = "A maze generator"
 readme = "README.md"
 requires-python = ">=3.10"
+<<<<<<< HEAD
 dependencies = ["mlx"]
+=======
+dependencies = [
+    "mlx",
+]
+>>>>>>> origin
 
 [dependency-groups]
 dev = [
@@ -19,3 +25,6 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/mazegen"]
+
+[tool.uv.sources]
+mlx = { path = "libs/mlx-2.2-py3-none-any.whl" }

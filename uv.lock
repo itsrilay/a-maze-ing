@@ -135,7 +135,11 @@ dev = [
 ]
 
 [package.metadata]
+<<<<<<< HEAD
 requires-dist = [{ name = "mlx" }]
+=======
+requires-dist = [{ name = "mlx", path = "libs/mlx-2.2-py3-none-any.whl" }]
+>>>>>>> origin
 
 [package.metadata.requires-dev]
 dev = [
@@ -155,6 +159,7 @@ wheels = [
 
 [[package]]
 name = "mlx"
+<<<<<<< HEAD
 version = "0.30.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
@@ -196,6 +201,12 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/f6/63/4d8f6fefb507c028df4454dabfe8d8e0ad2961bb06510b6aca23d2d5b2be/mlx_metal-0.30.3-py3-none-macosx_14_0_arm64.whl", hash = "sha256:6276312b02353714c7c6515169569fe1c4bebe3229c8ecf1fdb375a13e78c966", size = 37716245, upload-time = "2026-01-14T01:16:34.838Z" },
     { url = "https://files.pythonhosted.org/packages/35/91/1d452e48a4bb4958844fd3bb28ae31b8de110549c009ebec5024ce27ebf3/mlx_metal-0.30.3-py3-none-macosx_15_0_arm64.whl", hash = "sha256:c096c0a3428f3f96a06220f97a36f9528b18bc05173f821eb05bc8458e723fa8", size = 37712125, upload-time = "2026-01-14T01:16:38.619Z" },
     { url = "https://files.pythonhosted.org/packages/fe/36/7a3cbca85542b5ca4faf871e35927f43aa0e3fc830ae5b699780fe723677/mlx_metal-0.30.3-py3-none-macosx_26_0_arm64.whl", hash = "sha256:69068533bd1ee8b0379ce5de57ed5fd313577a10ecab58e1332fd1ff7248a75e", size = 46488962, upload-time = "2026-01-14T05:52:04.523Z" },
+=======
+version = "2.2"
+source = { path = "libs/mlx-2.2-py3-none-any.whl" }
+wheels = [
+    { filename = "mlx-2.2-py3-none-any.whl", hash = "sha256:7a1a44b50b6295f574522ba1a1e589632c6299d193dec57c951e8fdfb3337195" },
+>>>>>>> origin
 ]
 
 [[package]]
