@@ -4,13 +4,7 @@ version = "0.1.0"
 description = "A maze generator"
 readme = "README.md"
 requires-python = ">=3.10"
-<<<<<<< HEAD
 dependencies = ["mlx"]
-=======
-dependencies = [
-    "mlx",
-]
->>>>>>> origin
 
 [dependency-groups]
 dev = [
