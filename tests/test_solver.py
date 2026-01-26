@@ -1,4 +1,4 @@
-from mazegen.solver import MazeSolver
+from mazegen.MazeSolver import MazeSolver
 
 
 def test_solve_simple_path() -> None:

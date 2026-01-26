@@ -1,6 +1,6 @@
 from mazegen.load_config import load_config
 from mazegen.generator import MazeGenerator
-from mazegen.solver import MazeSolver
+from mazegen.MazeSolver import MazeSolver
 from mazegen.writer import save_maze
 
 
