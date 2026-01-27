@@ -2,20 +2,23 @@ from src.mazegen.load_config import load_config
 from src.mazegen.MazeGenerator import MazeGenerator
 from src.mazegen.MazeSolver import MazeSolver
 from src.mazegen.writer import save_maze
-from src.mazegen.interface.MazeInterface import MazeInterface
+from src.mazegen.interface.MazeDraw import MazeDraw
 
 
 def main() -> None:
     """Entry point for the application script."""
     config = load_config()
     print(config)
+
     generator = MazeGenerator(config["HEIGHT"], config["WIDTH"])
     generator.generate_maze(config["PERFECT"], config["ENTRY"], config["EXIT"])
+
     solver = MazeSolver(generator.grid)
     path = solver.solve_maze(config["ENTRY"], config["EXIT"])
     save_maze(solver.grid, path, config)
-    maze = MazeInterface()
-    maze.init_screen("Amazing")
+    print(solver.grid)
+    screen = MazeDraw()
+    screen.draw("Amazing", generator.grid, config["HEIGHT"], config["WIDTH"])
 
 
 if __name__ == "__main__":

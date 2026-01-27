@@ -8,11 +8,17 @@ class MazeInterface(Mlx):
     Class for Drawing and Handling interface
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
+        self.img_data: Optional[memoryview] = None
+        self.bpp: int = 0
+        self.size_line: int = 0
 
     def init_screen(self,
                     title: str,
+                    grid: list[list[int]],
+                    rows: int,
+                    cols: int,
                     width: int = 800,
                     height: int = 800) -> None:
         """
@@ -22,6 +28,9 @@ class MazeInterface(Mlx):
             # Init unit measures
             self.width: int = width
             self.height: int = height
+            self.grid_data = grid
+            self.rows_data = rows
+            self.cols_data = cols
 
             # Init Maze vars
             self.mlx_ptr: Any = self.mlx_init()
@@ -29,21 +38,22 @@ class MazeInterface(Mlx):
                                                     self.width,
                                                     self.height,
                                                     title)
+            self.mlx_clear_window(self.mlx_ptr, self.win_ptr)
 
-            # Setup image (if needed for drawing pixels directly later)
+            # Setup image for efficient drawing
             self.img_ptr = self.mlx_new_image(self.mlx_ptr,
                                               self.width,
                                               self.height)
 
-            # Clear window (black background usually)
-            self.mlx_clear_window(self.mlx_ptr, self.win_ptr)
+            # Get image data address
+            data = self.mlx_get_data_addr(self.img_ptr)
+            self.img_data = data[0]
+            self.bits_per_pixel = data[1]
+            self.line_lenght = data[2]
+            self.endian = data[3]
 
-            # Setup hooks and initial drawing
             self.handle_hook()
-            self.draw_sentence()
 
-            # Start the main loop
-            self.mlx_loop(self.mlx_ptr)
         except Exception as error:
             print(f"Error initializing screen: {error}")
             sys.exit(1)
@@ -65,15 +75,6 @@ class MazeInterface(Mlx):
         except Exception as error:
             print(f"Error exiting window: {error}")
             sys.exit(1)
-
-    def draw_sentence(self) -> None:
-        """
-        Draw a test sentence on the screen.
-        """
-
-        white_color = 0xFFFFFF
-        self.mlx_string_put(self.mlx_ptr, self.win_ptr, 20, 20, white_color,
-                            "Hello PyMlx!")
 
     def handle_hook(self) -> None:
         """
