@@ -17,8 +17,9 @@ def main() -> None:
     path = solver.solve_maze(config["ENTRY"], config["EXIT"])
     save_maze(solver.grid, path, config)
     print(solver.grid)
-    screen = MazeDraw()
-    screen.draw("Amazing", generator.grid, config["HEIGHT"], config["WIDTH"])
+    screen = MazeDraw("A-Maze-Ing", generator.grid,
+                      config["ENTRY"], config["EXIT"], path)
+    screen.draw()
 
 
 if __name__ == "__main__":
