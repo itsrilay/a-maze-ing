@@ -9,13 +9,3 @@ __pycache__/
 
 # Testing
 .pytest_cache/
-
-<<<<<<< HEAD
-# Dependencies
-mlx/
-
-# subject
-=======
-# Subject
->>>>>>> origin
-subject.pdf
