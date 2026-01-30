@@ -11,6 +11,14 @@ OPPOSITE_DIR = {
     Direction.WEST: Direction.EAST
 }
 
+PATTERN = [
+    [1, 0, 1, 0, 1, 1, 1],
+    [1, 0, 1, 0, 0, 0, 1],
+    [1, 1, 1, 0, 1, 1, 1],
+    [0, 0, 1, 0, 1, 0, 0],
+    [0, 0, 1, 0, 1, 1, 1]
+]
+
 
 class MazeGenerator:
     """
@@ -74,6 +82,19 @@ class MazeGenerator:
             else:
                 continue
 
+    def _make_pattern(self) -> None:
+        if self.width < len(PATTERN[0]) + 2 or self.height < len(PATTERN) + 2:
+            print("ERROR: Maze too small for 42 pattern.")
+            return
+
+        start_x = (self.width - len(PATTERN[0])) // 2
+        start_y = (self.height - len(PATTERN)) // 2
+
+        for r_index, row_list in enumerate(PATTERN):
+            for c_index, value in enumerate(row_list):
+                if value == 1:
+                    self.grid[start_y + r_index][start_x + c_index] = 31
+
     def get_unvisited_neighbors(
         self, x: int, y: int
     ) -> list[tuple[int, int, Direction]]:
@@ -116,7 +137,12 @@ class MazeGenerator:
             entry (tuple[int, int]): Coordinates (x, y) of the entrance.
             exit (tuple[int, int]): Coordinates (x, y) of the exit.
         """
-        stack = [(0, 0)]
+        self._make_pattern()
+        if self.grid[entry[1]][entry[0]] == 31:
+            raise ValueError("ERROR: Impossible entry coordinates.")
+        elif self.grid[exit[1]][exit[0]] == 31:
+            raise ValueError("ERROR: Impossible exit coordinates.")
+        stack = [entry]
 
         while len(stack):
             cell = stack[-1]
@@ -159,6 +185,8 @@ class MazeGenerator:
                     top_str += " E "
                 elif (x, y) == exit:
                     top_str += " X "
+                elif self.grid[y][x] == 31:
+                    top_str += " # "
                 else:
                     top_str += "   "
                 if self.grid[y][x] & Direction.EAST:
