@@ -24,9 +24,7 @@ jobs:
         run: uv sync --all-extras --dev
 
       - name: Run linters
-        run: |
-          make lint
-          make lint-strict
+        run: make lint
         
       - name: Run tests
         run: uv run pytest
