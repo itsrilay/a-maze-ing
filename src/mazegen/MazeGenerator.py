@@ -84,7 +84,7 @@ class MazeGenerator:
 
     def _make_pattern(self) -> None:
         if self.width < len(PATTERN[0]) + 2 or self.height < len(PATTERN) + 2:
-            print("Error: Maze too small for 42 pattern.")
+            print("ERROR: Maze too small for 42 pattern.")
             return
 
         start_x = (self.width - len(PATTERN[0])) // 2
@@ -139,9 +139,9 @@ class MazeGenerator:
         """
         self._make_pattern()
         if self.grid[entry[1]][entry[0]] == 31:
-            raise ValueError("Impossible entry coordinates.")
+            raise ValueError("ERROR: Impossible entry coordinates.")
         elif self.grid[exit[1]][exit[0]] == 31:
-            raise ValueError("Impossible exit coordinates.")
+            raise ValueError("ERROR: Impossible exit coordinates.")
         stack = [entry]
 
         while len(stack):
