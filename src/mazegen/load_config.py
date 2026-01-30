@@ -2,7 +2,6 @@ from typing import Any, cast
 from mazegen.common import MazeConfig
 import sys
 
-
 MANDATORY_KEYS = ["WIDTH", "HEIGHT", "ENTRY", "EXIT", "OUTPUT_FILE", "PERFECT"]
 
 
@@ -47,7 +46,7 @@ def validate_config(config: dict[str, Any]) -> None:
     missing_keys = [k for k in MANDATORY_KEYS if k not in config.keys()]
     if missing_keys:
         keys = "\n".join(missing_keys)
-        sys.exit(f"ERROR: Missing mandatory keys in config:\n{keys}")
+        raise ValueError(f"ERROR: Missing mandatory keys in config:\n{keys}")
 
     # Check for invalid values
     for key, value in config.items():
@@ -58,7 +57,7 @@ def validate_config(config: dict[str, Any]) -> None:
             if expected_type == tuple[int, int]:
                 expected_type = tuple
             if not isinstance(value, expected_type):
-                sys.exit(
+                raise ValueError(
                     f"ERROR: Invalid value for {key} in config: " +
                     f"Expected: {expected_type}   Got: {type(value)}"
                 )
@@ -66,7 +65,9 @@ def validate_config(config: dict[str, Any]) -> None:
         # Validate numeric value
         if isinstance(value, (int, tuple)) and not isinstance(value, bool):
             if contains_negative(cast(tuple[int, int] | int, value)):
-                sys.exit(f"ERROR: Negative integer for {key} in config")
+                raise ValueError(
+                    f"ERROR: Negative integer for {key} in config"
+                )
 
 
 def parse_value(value: str) -> Any:
@@ -94,14 +95,14 @@ def parse_value(value: str) -> Any:
         return False
 
     # Attempt to parse coordinates "x,y"
-    try:
+    if "," in value:
         x, y = value.split(",")
         if x.strip().isdigit() and y.strip().isdigit():
             return (int(x), int(y))
         else:
             # Comma implies a coordinate, failure to parse means syntax error.
-            sys.exit("ERROR: Invalid coordinate values in config.")
-    except ValueError:
+            raise ValueError("ERROR: Invalid coordinate values in config.")
+    else:
         # No comma found, return the raw string (e.g. filename)
         return value
 
@@ -123,7 +124,7 @@ def load_config() -> MazeConfig:
     try:
         filename = sys.argv[1]
     except IndexError:
-        sys.exit(
+        raise ValueError(
             "ERROR: No configuration file provided. " +
             "\nUsage: python3 a_maze_ing.py <config_file>"
         )
@@ -136,11 +137,13 @@ def load_config() -> MazeConfig:
                     continue
                 try:
                     key, value = line.strip().split("=", 1)
-                    config[key.upper()] = parse_value(value)
                 except ValueError:
-                    sys.exit("ERROR: Expected 'KEY=VALUE' pair in config")
+                    raise ValueError(
+                        "ERROR: Expected 'KEY=VALUE' pair in config"
+                    )
+                config[key.upper()] = parse_value(value)
     except FileNotFoundError:
-        sys.exit(f"ERROR: Configuration file '{filename}' not found.")
+        raise ValueError(f"ERROR: Configuration file '{filename}' not found.")
 
     validate_config(config)
 
