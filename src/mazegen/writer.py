@@ -30,7 +30,10 @@ def save_maze(
         for row in grid:
             for col in row:
                 # Use f-string with :X to format integer as uppercase Hex
-                file.write(f"{col:X}")
+                if col == 31:
+                    file.write(f"{col-16:X}")
+                else:
+                    file.write(f"{col:X}")
             file.write("\n")
         file.write("\n")
 
