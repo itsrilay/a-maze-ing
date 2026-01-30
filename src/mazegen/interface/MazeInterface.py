@@ -10,17 +10,13 @@ class MazeInterface(Mlx):
 
     def __init__(self) -> None:
         super().__init__()
-        self.img_data: Optional[memoryview] = None
         self.bpp: int = 0
         self.size_line: int = 0
 
     def init_screen(self,
                     title: str,
-                    grid: list[list[int]],
-                    rows: int,
-                    cols: int,
-                    width: int = 800,
-                    height: int = 800) -> None:
+                    width: int,
+                    height: int) -> None:
         """
         Initialize the MLX window and start the loop.
         """
@@ -28,9 +24,6 @@ class MazeInterface(Mlx):
             # Init unit measures
             self.width: int = width
             self.height: int = height
-            self.grid_data = grid
-            self.rows_data = rows
-            self.cols_data = cols
 
             # Init Maze vars
             self.mlx_ptr: Any = self.mlx_init()
@@ -47,13 +40,12 @@ class MazeInterface(Mlx):
 
             # Get image data address
             data = self.mlx_get_data_addr(self.img_ptr)
-            self.img_data = data[0]
+            self.img_data: memoryview[int] = data[0]
             self.bits_per_pixel = data[1]
             self.line_lenght = data[2]
             self.endian = data[3]
 
             self.handle_hook()
-
         except Exception as error:
             print(f"Error initializing screen: {error}")
             sys.exit(1)
@@ -92,3 +84,14 @@ class MazeInterface(Mlx):
         self.mlx_key_hook(self.win_ptr, mykey, None)
 
         self.mlx_hook(self.win_ptr, 17, 0, self.exit_window, None)
+
+    def my_mlx_put_pixel(self, coords: tuple[int, int], color: int) -> None:
+        """
+        Docstring for my_mlx_put_pixel
+        coords is the coordinates to print the value
+        """
+        x, y = coords
+        if 0 <= x < self.width:
+            if 0 <= y < self.height:
+                offset = (y * self.line_lenght) + (x * 4)
+                self.img_data[offset:offset+4] = color.to_bytes(4, 'little')

@@ -3,7 +3,6 @@ from src.mazegen.MazeGenerator import MazeGenerator
 from src.mazegen.MazeSolver import MazeSolver
 from src.mazegen.writer import save_maze
 from src.mazegen.interface.MazeDraw import MazeDraw
-import sys
 
 
 def main() -> None:
@@ -12,23 +11,22 @@ def main() -> None:
         config = load_config()
         print(config)
 
-        height = config["HEIGHT"]
-        width = config["WIDTH"]
-        entry_tup = config["ENTRY"]
-        exit_tup = config["EXIT"]
-        perfect = config["PERFECT"]
-
-        generator = MazeGenerator(height, width)
-        generator.generate_maze(perfect, entry_tup, exit_tup)
+        generator = MazeGenerator(config["HEIGHT"], config["WIDTH"])
+        generator.generate_maze(
+            config["PERFECT"], config["ENTRY"], config["EXIT"]
+        )
 
         solver = MazeSolver(generator.grid)
-        path = solver.solve_maze(entry_tup, exit_tup)
+        path = solver.solve_maze(config["ENTRY"], config["EXIT"])
         save_maze(solver.grid, path, config)
         print(solver.grid)
-        screen = MazeDraw()
-        screen.draw("Amazing", generator.grid, height, width)
+
+        screen = MazeDraw(
+            "A-Maze-Ing", generator.grid, config["ENTRY"], config["EXIT"], path
+        )
+        screen.draw()
     except ValueError as e:
-        sys.exit(e)
+        print(e)
 
 
 if __name__ == "__main__":
