@@ -63,7 +63,7 @@ def test_load_config_valid_imperfect() -> None:
 def test_load_config_missing_key() -> None:
     """Tests loading a configuration with a missing mandatory key.
 
-    Verifies that the program exits gracefully (SystemExit) when
+    Verifies that the program exits gracefully (ValueError) when
     a required key (e.g., EXIT) is absent.
     """
     test_args = ["prog_name", "fake_config.txt"]
@@ -78,7 +78,7 @@ def test_load_config_missing_key() -> None:
     )
     with patch.object(sys, 'argv', test_args):
         with patch("builtins.open", new=mock_open(read_data=mock_data)):
-            with pytest.raises(SystemExit):
+            with pytest.raises(ValueError):
                 load_config()
 
 
@@ -100,7 +100,7 @@ def test_load_config_negative_height() -> None:
     )
     with patch.object(sys, 'argv', test_args):
         with patch("builtins.open", new=mock_open(read_data=mock_data)):
-            with pytest.raises(SystemExit):
+            with pytest.raises(ValueError):
                 load_config()
 
 
@@ -122,7 +122,7 @@ def test_load_config_invalid_bool() -> None:
     )
     with patch.object(sys, 'argv', test_args):
         with patch("builtins.open", new=mock_open(read_data=mock_data)):
-            with pytest.raises(SystemExit):
+            with pytest.raises(ValueError):
                 load_config()
 
 
@@ -144,7 +144,7 @@ def test_load_config_invalid_coordinate_format() -> None:
     )
     with patch.object(sys, 'argv', test_args):
         with patch("builtins.open", new=mock_open(read_data=mock_data)):
-            with pytest.raises(SystemExit):
+            with pytest.raises(ValueError):
                 load_config()
 
 
@@ -166,7 +166,7 @@ def test_load_config_negative_coordinate() -> None:
     )
     with patch.object(sys, 'argv', test_args):
         with patch("builtins.open", new=mock_open(read_data=mock_data)):
-            with pytest.raises(SystemExit):
+            with pytest.raises(ValueError):
                 load_config()
 
 
@@ -180,7 +180,7 @@ def test_load_config_file_not_found() -> None:
 
     with patch.object(sys, 'argv', test_args):
         with patch("builtins.open", side_effect=FileNotFoundError):
-            with pytest.raises(SystemExit):
+            with pytest.raises(ValueError):
                 load_config()
 
 
@@ -195,5 +195,5 @@ def test_load_config_bad_syntax() -> None:
     mock_data = "WIDTH:20\nHEIGHT=15"
     with patch.object(sys, 'argv', test_args):
         with patch("builtins.open", new=mock_open(read_data=mock_data)):
-            with pytest.raises(SystemExit):
+            with pytest.raises(ValueError):
                 load_config()

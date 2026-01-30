@@ -58,7 +58,7 @@ def validate_config(config: dict[str, Any]) -> None:
                 expected_type = tuple
             if not isinstance(value, expected_type):
                 raise ValueError(
-                    f"ERROR: Invalid value for {key} in config: " +
+                    f"ERROR: Invalid value for {key} in config. " +
                     f"Expected: {expected_type}   Got: {type(value)}"
                 )
 
@@ -66,8 +66,16 @@ def validate_config(config: dict[str, Any]) -> None:
         if isinstance(value, (int, tuple)) and not isinstance(value, bool):
             if contains_negative(cast(tuple[int, int] | int, value)):
                 raise ValueError(
-                    f"ERROR: Negative integer for {key} in config"
+                    f"ERROR: Negative integer for {key} in config."
                 )
+
+    # Validate ENTRY/EXIT coordinates
+    en_x, en_y = config["ENTRY"][0], config["ENTRY"][1]
+    ex_x, ex_y = config["EXIT"][0], config["EXIT"][1]
+    width, height = config["WIDTH"], config["HEIGHT"]
+
+    if en_x >= width or ex_x >= width or en_y >= height or ex_y >= height:
+        raise ValueError("ERROR: Invalid coordinate values in config.")
 
 
 def parse_value(value: str) -> Any:
