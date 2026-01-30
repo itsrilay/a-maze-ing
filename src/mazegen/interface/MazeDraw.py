@@ -1,5 +1,5 @@
-from src.mazegen.interface.MazeInterface import MazeInterface
-from src.mazegen.common import Direction
+from mazegen.interface.MazeInterface import MazeInterface
+from mazegen.common import Direction
 
 
 class MazeDraw:
