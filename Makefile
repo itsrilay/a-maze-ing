@@ -13,8 +13,4 @@ clean:
 
 lint:
 	uv run flake8 . 
-	uv run mypy . --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs --exclude mlx
-
-lint-strict:
-	uv run flake8 .
-	uv run mypy . --strict --exclude mlx
+	uv run mypy . --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
