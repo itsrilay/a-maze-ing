@@ -24,3 +24,7 @@ packages = ["src/mazegen"]
 
 [tool.uv.sources]
 mlx = { path = "libs/mlx-2.2-py3-none-any.whl" }
+
+[[tool.mypy.overrides]]
+module = "mlx"
+ignore_missing_imports = true
