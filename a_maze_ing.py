@@ -7,18 +7,27 @@ from src.mazegen.interface.MazeDraw import MazeDraw
 
 def main() -> None:
     """Entry point for the application script."""
-    config = load_config()
-    print(config)
+    try:
+        config = load_config()
+        print(config)
 
-    generator = MazeGenerator(config["HEIGHT"], config["WIDTH"])
-    generator.generate_maze(config["PERFECT"], config["ENTRY"], config["EXIT"])
+        height = config["HEIGHT"]
+        width = config["WIDTH"]
+        entry_tup = config["ENTRY"]
+        exit_tup = config["EXIT"]
+        perfect = config["PERFECT"]
 
-    solver = MazeSolver(generator.grid)
-    path = solver.solve_maze(config["ENTRY"], config["EXIT"])
-    save_maze(solver.grid, path, config)
-    print(solver.grid)
-    screen = MazeDraw()
-    screen.draw("Amazing", generator.grid, config["HEIGHT"], config["WIDTH"])
+        generator = MazeGenerator(height, width)
+        generator.generate_maze(perfect, entry_tup, exit_tup)
+
+        solver = MazeSolver(generator.grid)
+        path = solver.solve_maze(entry_tup, exit_tup)
+        save_maze(solver.grid, path, config)
+        print(solver.grid)
+        screen = MazeDraw()
+        screen.draw("Amazing", generator.grid, height, width)
+    except ValueError as e:
+        print(e)
 
 
 if __name__ == "__main__":
