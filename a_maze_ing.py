@@ -3,6 +3,7 @@ from src.mazegen.MazeGenerator import MazeGenerator
 from src.mazegen.MazeSolver import MazeSolver
 from src.mazegen.writer import save_maze
 from src.mazegen.interface.MazeDraw import MazeDraw
+import sys
 
 
 def main() -> None:
@@ -27,7 +28,7 @@ def main() -> None:
         screen = MazeDraw()
         screen.draw("Amazing", generator.grid, height, width)
     except ValueError as e:
-        print(e)
+        sys.exit(e)
 
 
 if __name__ == "__main__":
