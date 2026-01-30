@@ -1,6 +1,10 @@
 install:
 	uv sync
 
+build:
+	uv build
+	mv dist/mazegen-*.whl .
+
 run:
 	@uv run a_maze_ing.py config.txt
 
