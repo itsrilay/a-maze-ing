@@ -72,6 +72,10 @@ class MazeGenerator:
                 if nx == self.width or ny == self.height:
                     continue
 
+                # Prevent breaking 42 pattern
+                if self.grid[y][x] == 31 or self.grid[ny][nx] == 31:
+                    continue
+
                 # Remove the wall from the current cell
                 self.grid[y][x] -= direction
 
