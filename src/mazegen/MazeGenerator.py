@@ -12,8 +12,8 @@ OPPOSITE_DIR = {
 }
 
 PATTERN = [
-    [1, 0, 1, 0, 1, 1, 1],
-    [1, 0, 1, 0, 0, 0, 1],
+    [1, 0, 0, 0, 1, 1, 1],
+    [1, 0, 0, 0, 0, 0, 1],
     [1, 1, 1, 0, 1, 1, 1],
     [0, 0, 1, 0, 1, 0, 0],
     [0, 0, 1, 0, 1, 1, 1]
@@ -49,6 +49,17 @@ class MazeGenerator:
         ]
         random.seed(seed)
 
+    def _is_area_open(self, tx: int, ty: int) -> bool:
+        if tx < 0 or tx + 2 >= self.width or ty < 0 or ty + 2 >= self.height:
+            return False
+        for x in range(tx, tx + 3):
+            for y in range(ty, ty + 3):
+                if self.grid[y][x] & Direction.SOUTH and y != ty + 2:
+                    return False
+                if self.grid[y][x] & Direction.EAST and x != tx + 2:
+                    return False
+        return True
+
     def _make_imperfect(self) -> None:
         """Removes random internal walls to create loops in the maze.
 
@@ -81,6 +92,21 @@ class MazeGenerator:
 
                 # Remove the corresponding wall from the neighbor
                 self.grid[ny][nx] -= OPPOSITE_DIR[direction]
+
+                # Check for a 3x3 open area
+                is_open = False
+                for dx in range(-2, 1):
+                    if is_open:
+                        break
+                    for dy in range(-2, 1):
+                        tx, ty = x + dx, y + dy
+                        if self._is_area_open(tx, ty):
+                            is_open = True
+                            break
+                if is_open:
+                    self.grid[y][x] += direction
+                    self.grid[ny][nx] += OPPOSITE_DIR[direction]
+                    continue
 
                 walls_removed += 1
             else:
