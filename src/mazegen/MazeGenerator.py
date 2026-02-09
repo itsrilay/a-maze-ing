@@ -190,7 +190,6 @@ class MazeGenerator:
             self._make_imperfect()
 
         self.display_maze(entry, exit)
-        # self.draw_maze or return data to draw maze
 
     def display_maze(
         self,
