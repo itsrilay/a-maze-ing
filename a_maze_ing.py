@@ -1,8 +1,8 @@
-from mazegen.load_config import load_config
-from mazegen.MazeGenerator import MazeGenerator
-from mazegen.MazeSolver import MazeSolver
-from mazegen.writer import save_maze
-from mazegen.interface.MazeDraw import MazeDraw
+from mazegen import load_config
+from mazegen import MazeGenerator
+from mazegen import MazeSolver
+from mazegen import save_maze
+from mazegen.interface import MazeDraw
 
 
 def main() -> None:
