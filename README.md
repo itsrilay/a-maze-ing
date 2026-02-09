@@ -39,12 +39,6 @@ make debug
 make lint
 ```
 
-* **Lint (strict)**: Check code quality with `flake8` and `mypy --strict`
-
-```bash
-make lint-strict
-```
-
 * **Clean**: Remove temporary files and caches.
 
 ```bash
@@ -62,6 +56,7 @@ The program takes a configuration file with one `KEY=VALUE` pair per line.
 | `EXIT` | Exit coordinates (x,y) | `EXIT=19,14` |
 | `OUTPUT_FILE` | Filename for the output | `OUTPUT_FILE=maze.txt` |
 | `PERFECT` | `True` for a single path, `False` for loops | `PERFECT=True` |
+| `SEED` | Optional seed for reproducible generation | `SEED=123` |
 
 ## Algorithms
 
