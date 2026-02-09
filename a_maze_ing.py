@@ -11,7 +11,9 @@ def main() -> None:
         config = load_config()
         print(config)
 
-        generator = MazeGenerator(config["HEIGHT"], config["WIDTH"])
+        generator = MazeGenerator(
+            config["HEIGHT"], config["WIDTH"], config.get("SEED")
+        )
         generator.generate_maze(
             config["PERFECT"], config["ENTRY"], config["EXIT"]
         )

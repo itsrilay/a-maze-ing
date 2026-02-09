@@ -56,6 +56,10 @@ def validate_config(config: dict[str, Any]) -> None:
             # isinstance() doesn't support generics like tuple[int, int]
             if expected_type == tuple[int, int]:
                 expected_type = tuple
+            # The NotRequired generic will cause a TypeError with isinstance
+            # Skip this runtime check as the type is handled by parse_value
+            elif "NotRequired" in str(expected_type):
+                continue
             if not isinstance(value, expected_type):
                 raise ValueError(
                     f"ERROR: Invalid value for {key} in config. " +
@@ -99,10 +103,13 @@ def parse_value(value: str) -> Any:
     except ValueError:
         pass
 
+    # Convert PERFECT value, or SEED for the special None case
     if value == "True":
         return True
     elif value == "False":
         return False
+    elif value == "None":
+        return None
 
     # Attempt to parse coordinates "x,y"
     if "," in value:

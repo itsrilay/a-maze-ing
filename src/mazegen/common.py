@@ -1,5 +1,5 @@
 from enum import IntEnum
-from typing import TypedDict
+from typing import TypedDict, NotRequired
 
 
 class MazeConfig(TypedDict):
@@ -9,6 +9,7 @@ class MazeConfig(TypedDict):
     EXIT: tuple[int, int]
     OUTPUT_FILE: str
     PERFECT: bool
+    SEED: NotRequired[int | None]
 
 
 class Direction(IntEnum):
