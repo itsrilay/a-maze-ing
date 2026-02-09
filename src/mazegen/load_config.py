@@ -74,6 +74,8 @@ def validate_config(config: dict[str, Any]) -> None:
     ex_x, ex_y = config["EXIT"][0], config["EXIT"][1]
     width, height = config["WIDTH"], config["HEIGHT"]
 
+    if en_x == ex_x and en_y == en_y:
+        raise ValueError("ERROR: Entry and Exit cannot be the same.")
     if en_x >= width or ex_x >= width or en_y >= height or ex_y >= height:
         raise ValueError("ERROR: Invalid coordinate values in config.")
 
