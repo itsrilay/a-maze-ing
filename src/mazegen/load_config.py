@@ -48,6 +48,8 @@ def validate_config(config: dict[str, Any]) -> None:
         keys = "\n".join(missing_keys)
         raise ValueError(f"ERROR: Missing mandatory keys in config:\n{keys}")
 
+    config["OUTPUT_FILE"] = str(config["OUTPUT_FILE"])
+
     # Check for invalid values
     for key, value in config.items():
         # Validate type
