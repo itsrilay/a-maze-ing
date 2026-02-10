@@ -57,8 +57,13 @@ def validate_config(config: dict[str, Any]) -> None:
             if expected_type == tuple[int, int]:
                 expected_type = tuple
             # The NotRequired generic will cause a TypeError with isinstance
-            # Skip this runtime check as the type is handled by parse_value
+            # So instead of expected_type we use a tuple
             elif "NotRequired" in str(expected_type):
+                if value and not isinstance(value, (int, str)):
+                    raise ValueError(
+                        f"ERROR: Invalid value for {key} in config. " +
+                        f"Expected: {expected_type}   Got: {type(value)}"
+                    )
                 continue
             if not isinstance(value, expected_type):
                 raise ValueError(
@@ -82,6 +87,11 @@ def validate_config(config: dict[str, Any]) -> None:
         raise ValueError("ERROR: Entry and Exit cannot be the same.")
     if en_x >= width or ex_x >= width or en_y >= height or ex_y >= height:
         raise ValueError("ERROR: Invalid coordinate values in config.")
+
+    # Validate SEED value
+    seed = config.get("SEED")
+    if isinstance(seed, bool):
+        config["SEED"] = str(seed)
 
 
 def parse_value(value: str) -> Any:
@@ -108,7 +118,7 @@ def parse_value(value: str) -> Any:
         return True
     elif value == "False":
         return False
-    elif value == "None":
+    elif value == "None" or value == "":
         return None
 
     # Attempt to parse coordinates "x,y"
