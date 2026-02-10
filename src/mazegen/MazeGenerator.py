@@ -50,6 +50,15 @@ class MazeGenerator:
         random.seed(seed)
 
     def _is_area_open(self, tx: int, ty: int) -> bool:
+        """Identifies a 3x3 open area through the top left cell in the block.
+
+        Args:
+            tx (int): x value of top-left cell.
+            ty (int): y value of top-left cell.
+
+        Returns:
+            bool: True if the 3x3 area is open, False otherwise.
+        """
         if tx < 0 or tx + 2 >= self.width or ty < 0 or ty + 2 >= self.height:
             return False
         for x in range(tx, tx + 3):
@@ -113,6 +122,12 @@ class MazeGenerator:
                 continue
 
     def _make_pattern(self) -> None:
+        """Writes the fixed '42' pattern into the grid if dimensions allow.
+
+        Checks if the maze is large enough to hold the pattern. If so,
+        centers the pattern and marks those cells as closed walls (31).
+        Prints an error message if the maze is too small.
+        """
         if self.width < len(PATTERN[0]) + 2 or self.height < len(PATTERN) + 2:
             print("ERROR: Maze too small for 42 pattern.")
             return
@@ -155,17 +170,20 @@ class MazeGenerator:
         entry: tuple[int, int],
         exit: tuple[int, int]
     ) -> None:
-        """Generates the maze structure and displays the result.
+        """Generates the maze structure using the Recursive Backtracker.
 
-        Uses the Recursive Backtracker algorithm to create a perfect maze.
         If is_perfect is False, it subsequently removes random walls to
-        create loops. Finally, it delegates visualization to display_maze.
+        create loops.
 
         Args:
             is_perfect (bool): If True, generates a perfect maze (one path).
-                               If False, generates an imperfect maze (loops).
+                If False, generates an imperfect maze (loops).
             entry (tuple[int, int]): Coordinates (x, y) of the entrance.
             exit (tuple[int, int]): Coordinates (x, y) of the exit.
+
+        Raises:
+            ValueError: If the entry or exit coordinates overlap with the
+                fixed '42' pattern.
         """
         self._make_pattern()
         if self.grid[entry[1]][entry[0]] == 31:
