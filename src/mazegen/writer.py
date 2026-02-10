@@ -1,5 +1,4 @@
-from mazegen.common import DIRECTION_OFFSETS
-from mazegen.common import MazeConfig
+from mazegen.common import DIRECTION_OFFSETS, Direction, MazeConfig
 
 
 def save_maze(
@@ -20,10 +19,15 @@ def save_maze(
         grid (list[list[int]]): The maze grid bitmasks.
         path (list[tuple[int, int]]): The solution path coordinates.
         config (MazeConfig): The configuration containing output filename
-                                and entry/exit points.
+            and entry/exit points.
+
+    Raises:
+        OSError: If the output file cannot be opened or written to.
     """
     # Reverse lookup to find the Direction Enum from a coordinate tuple
-    reversed_offsets = {v: k for k, v in DIRECTION_OFFSETS.items()}
+    reversed_offsets: dict[tuple[int, int], Direction] = {
+        v: k for k, v in DIRECTION_OFFSETS.items()
+    }
 
     with open(config["OUTPUT_FILE"], "w") as file:
         # Write the Grid
@@ -40,6 +44,7 @@ def save_maze(
         file.write(f"{config['ENTRY'][0]},{config['ENTRY'][1]}\n")
         file.write(f"{config['EXIT'][0]},{config['EXIT'][1]}\n")
 
+        # Write solution path directions
         for i in range(len(path) - 1):
             curr = path[i]
             next_cell = path[i + 1]
@@ -53,3 +58,4 @@ def save_maze(
 
             # Write the first letter of the name (e.g., "N")
             file.write(direction_enum.name[0])
+        file.write("\n")

@@ -10,11 +10,11 @@ def contains_negative(value: int | tuple[int, int]) -> bool:
 
     Args:
         value (int | tuple[int, int]): The configuration value to check.
-        Can be an int, or a tuple of ints.
+            Can be an int, or a tuple of ints.
 
     Returns:
         bool: True if a single integer is <= 0 (invalid for dimensions) or
-        if any coordinate in a tuple is < 0 (invalid for positions).
+            if any coordinate in a tuple is < 0 (invalid for positions).
     """
     if isinstance(value, int):
         # Dimensions (WIDTH/HEIGHT) must be strictly positive (> 0)
@@ -37,8 +37,11 @@ def validate_config(config: dict[str, Any]) -> None:
 
     Args:
         config (dict[str, Any]): A dictionary containing the config settings.
-    """
 
+    Raises:
+        ValueError: If mandatory keys are missing, if values have incorrect
+            types, or if numeric values (dimensions/coordinates) are invalid.
+    """
     # Types for a valid config
     schema = MazeConfig.__annotations__
 
@@ -106,6 +109,10 @@ def parse_value(value: str) -> Any:
         Any: The parsed value. It returns an int if the string is numeric,
         a bool if it is 'True' or 'False', a tuple of ints if it is a
         coordinate pair (e.g., '1,2'), or the original string otherwise.
+
+    Raises:
+        ValueError: If the value contains a comma but cannot be parsed as
+            a valid pair of integer coordinates.
     """
     # Try to convert to int first.
     # This will convert "-5" to -5 successfully. We allow this here
@@ -146,7 +153,9 @@ def load_config() -> MazeConfig:
         MazeConfig: A dictionary containing the configuration settings.
 
     Raises:
-        SystemExit: If a line is not a valid key-value pair.
+        ValueError: If no configuration file argument is provided, if the
+            file cannot be found, if the file content is not in 'KEY=VALUE'
+            format, or if the configuration fails validation.
     """
     config: dict[str, Any] = {}
 

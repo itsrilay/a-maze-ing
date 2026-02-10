@@ -3,8 +3,7 @@ from mazegen.common import DIRECTION_OFFSETS
 
 
 class MazeSolver:
-    """
-    A class to solve mazes using the Breadth-First Search (BFS) algorithm.
+    """A class to solve mazes using the Breadth-First Search (BFS) algorithm.
 
     Attributes:
         grid (list[list[int]]): A 2D grid representing the maze, where each
@@ -13,7 +12,7 @@ class MazeSolver:
         height (int): The height of the maze grid.
     """
 
-    def __init__(self, grid: list[list[int]]):
+    def __init__(self, grid: list[list[int]]) -> None:
         """Initialize the MazeSolver with a maze grid.
 
         Args:
@@ -46,7 +45,7 @@ class MazeSolver:
             entry: None
         }
 
-        while (len(queue)):
+        while queue:
             curr_cell = queue.popleft()
             if curr_cell == exit:
                 break

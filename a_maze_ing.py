@@ -1,3 +1,13 @@
+"""Main entry point for the A-Maze-Ing application.
+
+This script acts as the coordinator for the entire pipeline:
+1. Loads and validates the configuration file.
+2. Generates a maze (perfect or imperfect).
+3. Solves the maze.
+4. Saves the results to an output file.
+5. Visualizes the maze using MiniLibX.
+"""
+
 from mazegen import load_config
 from mazegen import MazeGenerator
 from mazegen import MazeSolver
@@ -6,7 +16,12 @@ from mazegen.interface import MazeDraw
 
 
 def main() -> None:
-    """Entry point for the application script."""
+    """Orchestrates the maze generation, solving, and visualization process.
+
+    Reads configuration from the command line, executes the generation
+    and solving algorithms, writes the output to a file, and launches
+    the graphical interface. Handles configuration errors gracefully.
+    """
     try:
         config = load_config()
         print(config)
@@ -29,6 +44,8 @@ def main() -> None:
         screen.draw()
     except ValueError as e:
         print(e)
+    except OSError as e:
+        print(f"ERROR: Could not write to file: {e}")
 
 
 if __name__ == "__main__":
