@@ -1,3 +1,9 @@
+"""Shared constants and type definitions for the maze generation system.
+
+This module defines the configuration schema, direction enumerations,
+and movement offsets used throughout the package.
+"""
+
 from enum import IntEnum
 from typing import TypedDict
 from typing_extensions import NotRequired
