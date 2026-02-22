@@ -5,7 +5,7 @@ library. It provides classes for window management, user input handling,
 and drawing the maze structure and solution path.
 """
 
-from .MazeDraw import MazeDraw
-from .MazeInterface import MazeInterface
+from mazegen.interface.MazeDraw import MazeDraw
+from mazegen.interface.MazeInterface import MazeInterface
 
 __all__ = ["MazeDraw", "MazeInterface"]
