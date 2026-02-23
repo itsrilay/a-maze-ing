@@ -37,7 +37,12 @@ def main() -> None:
         save_maze(solver.grid, path, config)
 
         screen = MazeDraw(
-            "A-Maze-Ing", generator.grid, config["ENTRY"], config["EXIT"], path
+            "A-Maze-Ing",
+            generator.grid,
+            config["ENTRY"],
+            config["EXIT"],
+            config["PERFECT"],
+            path
         )
         screen.draw()
     except ValueError as e:
