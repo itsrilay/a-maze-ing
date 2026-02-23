@@ -101,7 +101,7 @@ self.grid = [
 This is the core engine. We use an explicit **stack** to track our path, which avoids Python's recursion limit.
 
 ```python
-stack = [(0, 0)]
+stack = [entry]
 
 while len(stack):
     cell = stack[-1]
@@ -168,6 +168,83 @@ while (len(queue)):
 
 * **Predecessors**: We store where we came from (`predecessors[(nx, ny)] = current`). This allows us to backtrack from the exit to the start to reconstruct the path.
 
+
+## Code Reusability
+
+This project is structured as a reusable Python package named `mazegen`. You can integrate the maze generation and solving logic into your own projects. A wheel file (`mazegen-1.0.0-py3-none-any.whl`) is provided in the root directory for installation via `pip`.
+
+### Usage Example
+
+Here is a basic example of how to use the package:
+
+```python
+from mazegen import MazeGenerator, MazeSolver
+
+# 1. Instantiate the generator with desired dimensions and settings
+config = {
+    "WIDTH": 20,
+    "HEIGHT": 15,
+    "ENTRY": (0, 0),
+    "EXIT": (19, 14),
+    "PERFECT": True,
+    "SEED": 42
+}
+generator = MazeGenerator(config["HEIGHT"], config["WIDTH"], config["SEED"])
+
+# 2. Generate the maze structure
+generator.generate_maze(config["PERFECT"], config["ENTRY"], config["EXIT"])
+
+# The generated grid is accessible via the 'grid' attribute
+# This grid can be used for custom processing or visualization
+maze_grid = generator.grid
+
+# 3. Instantiate the solver with the generated grid
+solver = MazeSolver(maze_grid)
+
+# 4. Solve the maze to find the shortest path
+# The entry and exit points are taken from the generator's config
+solution_path = solver.solve_maze(config["ENTRY"], config["EXIT"])
+
+if solution_path:
+    print(f"Shortest path found: {solution_path}")
+else:
+    print("No path found.")
+
+```
+
+This example demonstrates how to:
+*   Instantiate and use the `MazeGenerator`.
+*   Pass custom parameters like size and seed.
+*   Access the generated maze structure (`generator.grid`).
+*   Find a solution using the `MazeSolver`.
+
+## Team and Project Management
+
+This project was developed by **ruisilva** and **hroxo** as part of the 42 curriculum.
+
+### Roles and Collaboration
+This project was a collaborative effort where each team member took the lead on distinct components:
+
+*   **ruisilva**: Architected the core backend and project structure. This included implementing the maze generation algorithm (`MazeGenerator`), developing the pathfinding logic (`MazeSolver`), and establishing the foundational layout of the package.
+
+*   **hroxo**: Led the development of the user-facing components. This involved building the graphical interface for maze visualization (`MazeDraw`) and integrating all the backend modules into the final, interactive application.
+
+While each member had primary ownership of these areas, all code was peer-reviewed to ensure quality and a shared understanding of the entire codebase.
+
+### Planning and Evolution
+The project followed an agile approach. We started with a basic plan to implement the core maze generation and solving algorithms. The plan evolved to incorporate a graphical interface and package the logic as a reusable module, based on the project requirements. The initial focus on a robust algorithmic core allowed for a smooth transition to building the user-facing features.
+
+### Retrospective
+*   **What Worked Well**: The modular design, separating the generator, solver, and interface, proved to be highly effective. It allowed for parallel development and easier debugging. Using `uv` for dependency management also streamlined the development setup.
+*   **What Could Be Improved**: In the future, we could expand the project to include more maze generation algorithms and add more comprehensive unit tests to cover edge cases in the visualization module.
+
+### Tools Used
+*   **Package Management**: `uv`
+*   **Building**: `hatchling`
+*   **Linting & Static Analysis**: `flake8`, `mypy`
+*   **Testing**: `pytest`
+*   **Automation**: `make`
+*   **Version Control**: `git`
 
 ## Resources
 

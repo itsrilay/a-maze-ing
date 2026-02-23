@@ -24,7 +24,6 @@ def main() -> None:
     """
     try:
         config = load_config()
-        print(config)
 
         generator = MazeGenerator(
             config["HEIGHT"], config["WIDTH"], config.get("SEED")
@@ -36,7 +35,6 @@ def main() -> None:
         solver = MazeSolver(generator.grid)
         path = solver.solve_maze(config["ENTRY"], config["EXIT"])
         save_maze(solver.grid, path, config)
-        print(solver.grid)
 
         screen = MazeDraw(
             "A-Maze-Ing", generator.grid, config["ENTRY"], config["EXIT"], path
