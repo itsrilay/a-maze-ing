@@ -300,10 +300,18 @@ class MazeDraw:
         self._redraw()
 
     def _redraw(self) -> None:
-        """Clear the image buffer and re-render the current maze state."""
+        """Clear the buffer, flush the maze image, then overlay the legend.
+
+        Calls ``mlx_do_sync`` after ``draw_maze`` to ensure the image is
+        fully committed to the X11 window before ``_draw_legend`` uses
+        ``mlx_string_put`` to draw text on top.  Without the sync step,
+        Python 3.10 may defer the ``XPutImage`` request so it executes
+        after ``XDrawString``, causing the image to overwrite the legend.
+        """
         try:
             self._clear_image()
             self.draw_maze()
+            self._mlx.mlx_do_sync(self._mlx.mlx_ptr)
             self._draw_legend()
         except Exception as error:
             print(f"Error during redraw: {error}")
