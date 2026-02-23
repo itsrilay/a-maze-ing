@@ -1,1 +1,11 @@
-CLAUDE.md
+# Configuration
+.vscode
+
+# Python / uv artifacts
+.mypy_cache
+__pycache__/
+.venv/
+.python-version
+
+# Testing
+.pytest_cache/
