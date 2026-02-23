@@ -342,5 +342,5 @@ class MazeDraw:
 
             self._redraw()
             self._mlx.mlx_loop(self._mlx.mlx_ptr)
-        except Exception as erro:
-            print(f"Error {erro}\nFunction draw MazeDraw.py")
+        except Exception as error:
+            print(f"Error {error}\nFunction draw MazeDraw.py")

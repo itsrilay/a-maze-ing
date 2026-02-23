@@ -59,7 +59,7 @@ class MazeInterface(Mlx):
             data = self.mlx_get_data_addr(self.img_ptr)
             self.img_data: memoryview = data[0]
             self.bits_per_pixel: int = data[1]
-            self.line_lenght: int = data[2]
+            self.line_length: int = data[2]
             self.endian: int = data[3]
             self.handle_hook()
         except Exception as error:
@@ -89,11 +89,23 @@ class MazeInterface(Mlx):
         def mymouse(
             button: int, x: int, y: int, param: Optional[Any]
         ) -> None:
-            """Handle mouse button events (currently a no-op)."""
+            """Handle mouse button events (currently a no-op).
+
+            Args:
+                button: Mouse button identifier.
+                x: Cursor x-coordinate at the time of the event.
+                y: Cursor y-coordinate at the time of the event.
+                param: Optional user-data pointer passed by MLX (unused).
+            """
             pass
 
         def mykey(keynum: int, param: Optional[Any]) -> None:
-            """Dispatch a key event to a registered callback or exit."""
+            """Dispatch a key event to a registered callback or exit.
+
+            Args:
+                keynum: X11 keysym code of the pressed key.
+                param: Optional user-data pointer passed by MLX (unused).
+            """
             if keynum in self.key_callbacks:
                 self.key_callbacks[keynum]()
                 return
@@ -115,7 +127,7 @@ class MazeInterface(Mlx):
         """
         x, y = coords
         if 0 <= x < self.width and 0 <= y < self.height:
-            offset = (y * self.line_lenght) + (x * 4)
+            offset = (y * self.line_length) + (x * 4)
             self.img_data[offset:offset + 4] = color.to_bytes(
                 4, 'little'
             )
