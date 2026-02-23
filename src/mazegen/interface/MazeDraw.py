@@ -255,15 +255,11 @@ class MazeDraw:
         surface (on top of the maze image), showing available controls
         and current state.
         """
-        theme = THEMES[self.theme_index]
-        text_color = theme["text"]
         legend_y = self.height - 40
-        path_status = "ON" if self.show_path else "OFF"
-        theme_name = THEME_NAMES[self.theme_index]
+        text_color = 0x00FFFFFF
 
         lines = [
             "R: New Maze  P: Toggle Path  C: Colour  Q/ESC: Quit",
-            f"Theme: {theme_name}   Path: {path_status}",
         ]
         for i, line in enumerate(lines):
             self._mlx.mlx_string_put(
@@ -311,7 +307,6 @@ class MazeDraw:
         try:
             self._clear_image()
             self.draw_maze()
-            self._mlx.mlx_do_sync(self._mlx.mlx_ptr)
             self._draw_legend()
         except Exception as error:
             print(f"Error during redraw: {error}")
