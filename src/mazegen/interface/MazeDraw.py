@@ -73,6 +73,7 @@ class MazeDraw:
         grid: list[list[int]],
         entry: tuple[int, int],
         exit: tuple[int, int],
+        perfect: bool,
         solution: list[tuple[int, int]] | None = None,
         screen_size: tuple[int, int] = (800, 800),
     ) -> None:
@@ -88,6 +89,7 @@ class MazeDraw:
         """
         self._mlx: MazeInterface = MazeInterface()
         self._grid: list[list[int]] = grid
+        self._perfect: bool = perfect
         self._entry: tuple[int, int] = entry
         self._exit: tuple[int, int] = exit
         self.solution: list[tuple[int, int]] | None = solution
@@ -279,7 +281,7 @@ class MazeDraw:
             rows = len(self._grid)
             cols = len(self._grid[0])
             gen = MazeGenerator(rows, cols)
-            gen.generate_maze(True, self._entry, self._exit)
+            gen.generate_maze(self._perfect, self._entry, self._exit)
             self._grid = gen.grid
             solver = MazeSolver(self._grid)
             self.solution = solver.solve_maze(self._entry, self._exit)
